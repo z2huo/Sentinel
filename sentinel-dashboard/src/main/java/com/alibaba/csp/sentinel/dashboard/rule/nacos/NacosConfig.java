@@ -21,10 +21,10 @@ import com.alibaba.csp.sentinel.dashboard.datasource.entity.gateway.GatewayFlowR
 import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.*;
 import com.alibaba.csp.sentinel.datasource.Converter;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigFactory;
 import com.alibaba.nacos.api.config.ConfigService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
@@ -49,12 +49,12 @@ public class NacosConfig {
 
     @Bean
     public Converter<List<FlowRuleEntity>, String> flowRuleEntityEncoder() {
-        return JSON::toJSONString;
+        return list -> JSON.toJSONString(list, SerializerFeature.PrettyFormat);
     }
 
     @Bean
     public Converter<String, List<FlowRuleEntity>> flowRuleEntityDecoder() {
-        return s -> JSON.parseArray(s, FlowRuleEntity.class);
+        return jsonString -> JSON.parseArray(jsonString, FlowRuleEntity.class);
     }
 
     // endregion
@@ -63,12 +63,12 @@ public class NacosConfig {
 
     @Bean
     public Converter<List<AuthorityRuleEntity>, String> authorRuleEntityEncoder() {
-        return JSON::toJSONString;
+        return list -> JSON.toJSONString(list, SerializerFeature.PrettyFormat);
     }
 
     @Bean
     public Converter<String, List<AuthorityRuleEntity>> authorRuleEntityDecoder() {
-        return s -> JSON.parseArray(s, AuthorityRuleEntity.class);
+        return jsonString -> JSON.parseArray(jsonString, AuthorityRuleEntity.class);
     }
 
     // endregion
@@ -77,24 +77,24 @@ public class NacosConfig {
 
     @Bean
     public Converter<List<DegradeRuleEntity>, String> degradeRuleEntityEncoder() {
-        return JSON::toJSONString;
+        return list -> JSON.toJSONString(list, SerializerFeature.PrettyFormat);
     }
 
     @Bean
     public Converter<String, List<DegradeRuleEntity>> degradeRuleEntityDecoder() {
-        return s -> JSON.parseArray(s, DegradeRuleEntity.class);
+        return jsonString -> JSON.parseArray(jsonString, DegradeRuleEntity.class);
     }
 
     // region 热点规则
 
     @Bean
     public Converter<List<ParamFlowRuleEntity>, String> paramRuleEntityEncoder() {
-        return JSON::toJSONString;
+        return list -> JSON.toJSONString(list, SerializerFeature.PrettyFormat);
     }
 
     @Bean
     public Converter<String, List<ParamFlowRuleEntity>> paramRuleEntityDecoder() {
-        return s -> JSON.parseArray(s, ParamFlowRuleEntity.class);
+        return jsonString -> JSON.parseArray(jsonString, ParamFlowRuleEntity.class);
     }
 
     // endregion
@@ -103,12 +103,12 @@ public class NacosConfig {
 
     @Bean
     public Converter<List<SystemRuleEntity>, String> systemRuleEntityEncoder() {
-        return JSON::toJSONString;
+        return list -> JSON.toJSONString(list, SerializerFeature.PrettyFormat);
     }
 
     @Bean
     public Converter<String, List<SystemRuleEntity>> systemRuleEntityDecoder() {
-        return s -> JSON.parseArray(s, SystemRuleEntity.class);
+        return jsonString -> JSON.parseArray(jsonString, SystemRuleEntity.class);
     }
 
     // endregion
@@ -117,12 +117,12 @@ public class NacosConfig {
 
     @Bean
     public Converter<List<ApiDefinitionEntity>, String> apiDefinitionEntityEncoder() {
-        return JSON::toJSONString;
+        return list -> JSON.toJSONString(list, SerializerFeature.PrettyFormat);
     }
 
     @Bean
     public Converter<String, List<ApiDefinitionEntity>> apiDefinitionEntityDecoder() {
-        return s -> JSON.parseArray(s, ApiDefinitionEntity.class);
+        return jsonString -> JSON.parseArray(jsonString, ApiDefinitionEntity.class);
     }
 
     // endregion
@@ -131,12 +131,12 @@ public class NacosConfig {
 
     @Bean
     public Converter<List<GatewayFlowRuleEntity>, String> gatewayFlowRuleEntityEncoder() {
-        return JSON::toJSONString;
+        return list -> JSON.toJSONString(list, SerializerFeature.PrettyFormat);
     }
 
     @Bean
     public Converter<String, List<GatewayFlowRuleEntity>> gatewayFlowRuleEntityDecoder() {
-        return s -> JSON.parseArray(s, GatewayFlowRuleEntity.class);
+        return jsonString -> JSON.parseArray(jsonString, GatewayFlowRuleEntity.class);
     }
 
     // endregion

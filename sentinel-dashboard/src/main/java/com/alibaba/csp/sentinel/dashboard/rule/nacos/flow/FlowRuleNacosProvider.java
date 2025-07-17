@@ -24,7 +24,6 @@ import com.alibaba.nacos.api.config.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ public class FlowRuleNacosProvider implements DynamicRuleProvider<List<FlowRuleE
         String rules = configService.getConfig(appName + NacosConfigUtil.FLOW_DATA_ID_POSTFIX,
                 NacosConfigUtil.GROUP_ID, 3000);
         if (StringUtil.isEmpty(rules)) {
-            return new ArrayList<>();
+            return List.of();
         }
         return converter.convert(rules);
     }
