@@ -27,6 +27,8 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
+ * <p>网关 API 分组管理规则
+ *
  * Entity for {@link ApiDefinition}.
  *
  * @author cdfive

@@ -24,7 +24,9 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * Entity for {@link GatewayFlowRule}.
+ * <p>网关流控规则
+ *
+ * <p>Entity for {@link GatewayFlowRule}.
  *
  * @author cdfive
  * @since 1.7.0
