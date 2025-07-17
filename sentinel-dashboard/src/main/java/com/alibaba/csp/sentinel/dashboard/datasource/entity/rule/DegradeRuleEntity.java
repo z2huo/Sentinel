@@ -20,6 +20,8 @@ import java.util.Date;
 import com.alibaba.csp.sentinel.slots.block.degrade.DegradeRule;
 
 /**
+ * <p>熔断降级规则
+ *
  * @author leyou
  */
 public class DegradeRuleEntity implements RuleEntity {

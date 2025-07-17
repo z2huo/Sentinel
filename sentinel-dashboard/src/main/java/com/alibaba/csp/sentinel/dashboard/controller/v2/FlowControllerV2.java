@@ -60,9 +60,18 @@ public class FlowControllerV2 {
 
     @Autowired
     @Qualifier("flowRuleDefaultProvider")
-    private DynamicRuleProvider<List<FlowRuleEntity>> ruleProvider;
+    private DynamicRuleProvider<List<FlowRuleEntity>> defaultRuleProvider;
+
     @Autowired
     @Qualifier("flowRuleDefaultPublisher")
+    private DynamicRulePublisher<List<FlowRuleEntity>> defaultRulePublisher;
+
+    @Autowired
+    @Qualifier("flowRuleNacosProvider")
+    private DynamicRuleProvider<List<FlowRuleEntity>> ruleProvider;
+
+    @Autowired
+    @Qualifier("flowRuleNacosPublisher")
     private DynamicRulePublisher<List<FlowRuleEntity>> rulePublisher;
 
     @GetMapping("/rules")
