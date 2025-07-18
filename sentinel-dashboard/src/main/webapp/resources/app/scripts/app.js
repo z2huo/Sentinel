@@ -126,6 +126,22 @@ angular
         }
       })
 
+      // .state('dashboard.flowV1', {
+      //     templateUrl: 'app/views/flow_v2.html',
+      //     url: '/v2/flow/:app',
+      //     controller: 'FlowControllerV2',
+      //     resolve: {
+      //         loadMyFiles: ['$ocLazyLoad', function ($ocLazyLoad) {
+      //             return $ocLazyLoad.load({
+      //                 name: 'sentinelDashboardApp',
+      //                 files: [
+      //                     'app/scripts/controllers/flow_v2.js',
+      //                 ]
+      //             });
+      //         }]
+      //     }
+      // })
+
       .state('dashboard.flow', {
           templateUrl: 'app/views/flow_v2.html',
           url: '/v2/flow/:app',
