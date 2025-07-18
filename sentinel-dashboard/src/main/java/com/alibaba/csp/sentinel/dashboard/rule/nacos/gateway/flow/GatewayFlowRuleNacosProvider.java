@@ -1,4 +1,4 @@
-package com.alibaba.csp.sentinel.dashboard.rule.nacos.gateway;
+package com.alibaba.csp.sentinel.dashboard.rule.nacos.gateway.flow;
 
 import com.alibaba.csp.sentinel.dashboard.datasource.entity.gateway.GatewayFlowRuleEntity;
 import com.alibaba.csp.sentinel.dashboard.rule.DynamicRuleProvider;
@@ -16,8 +16,8 @@ import java.util.List;
  *
  * @author z2huo
  */
-@Component("gatewayRuleNacosProvider")
-public class GatewayRuleNacosProvider implements DynamicRuleProvider<List<GatewayFlowRuleEntity>> {
+@Component("gatewayFlowRuleNacosProvider")
+public class GatewayFlowRuleNacosProvider implements DynamicRuleProvider<List<GatewayFlowRuleEntity>> {
 
     @Autowired
     private ConfigService configService;

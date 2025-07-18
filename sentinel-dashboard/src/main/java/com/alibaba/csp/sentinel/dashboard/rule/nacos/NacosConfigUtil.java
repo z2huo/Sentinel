@@ -54,7 +54,7 @@ public final class NacosConfigUtil {
     public static final String GATEWAY_FLOW_DATA_ID_POSTFIX = "-gw-flow-rules";
 
     /**
-     * 网关API分组管理规则
+     * 网关 API 分组管理规则
      */
     public static final String GATEWAY_API_DATA_ID_POSTFIX = "-gw-api-group-rules";
 
