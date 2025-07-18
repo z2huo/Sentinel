@@ -29,11 +29,12 @@
               <i class="fa fa-bar-chart"></i>&nbsp;&nbsp;实时监控</a>
           </li>
 
+            <!-- 非网关，簇点链路 -->
           <li ui-sref-active="active" ng-if="!entry.isGateway">
             <a ui-sref="dashboard.identity({app: entry.app})">
               <i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;簇点链路</a>
           </li>
-
+            <!-- 网关，簇点链路 -->
           <li ui-sref-active="active" ng-if="entry.isGateway">
             <a ui-sref="dashboard.gatewayIdentity({app: entry.app})">
               <i class="glyphicon glyphicon-filter"></i>&nbsp;&nbsp;请求链路</a>
@@ -48,11 +49,13 @@
             <a ui-sref="dashboard.gatewayApi({app: entry.app})">
               <i class="glyphicon glyphicon-tags"></i>&nbsp;&nbsp;&nbsp;API 管理</a>
           </li>
+
+            <!-- 网关流控 -->
           <li ui-sref-active="active" ng-if="entry.isGateway">
             <a ui-sref="dashboard.gatewayFlow({app: entry.app})">
               <i class="glyphicon glyphicon-filter"></i>&nbsp;&nbsp;流控规则</a>
           </li>
-
+            <!-- 非网关流控 -->
           <li ui-sref-active="active" ng-if="!entry.isGateway">
 <!--            <a ui-sref="dashboard.flowV1({app: entry.app})">-->
             <a ui-sref="dashboard.flow({app: entry.app})">
