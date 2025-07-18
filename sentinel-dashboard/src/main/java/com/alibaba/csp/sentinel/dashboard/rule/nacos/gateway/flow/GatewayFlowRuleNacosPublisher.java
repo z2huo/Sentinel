@@ -1,4 +1,4 @@
-package com.alibaba.csp.sentinel.dashboard.rule.nacos.gateway;
+package com.alibaba.csp.sentinel.dashboard.rule.nacos.gateway.flow;
 
 import com.alibaba.csp.sentinel.dashboard.datasource.entity.gateway.GatewayFlowRuleEntity;
 import com.alibaba.csp.sentinel.dashboard.rule.DynamicRulePublisher;
@@ -17,8 +17,8 @@ import java.util.List;
  *
  * @author z2huo
  */
-@Component("gatewayRuleNacosPublisher")
-public class GatewayRuleNacosPublisher implements DynamicRulePublisher<List<GatewayFlowRuleEntity>> {
+@Component("gatewayFlowRuleNacosPublisher")
+public class GatewayFlowRuleNacosPublisher implements DynamicRulePublisher<List<GatewayFlowRuleEntity>> {
 
     @Autowired
     private ConfigService configService;
@@ -32,7 +32,7 @@ public class GatewayRuleNacosPublisher implements DynamicRulePublisher<List<Gate
         if (rules == null) {
             return;
         }
-        configService.publishConfig(app + NacosConfigUtil.AUTHORITY_DATA_ID_POSTFIX,
+        configService.publishConfig(app + NacosConfigUtil.GATEWAY_FLOW_DATA_ID_POSTFIX,
                 NacosConfigUtil.GROUP_ID, converter.convert(rules), ConfigType.JSON.getType());
     }
 }
