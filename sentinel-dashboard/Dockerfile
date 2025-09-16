@@ -1,5 +1,7 @@
 
-FROM eclipse-temurin:21-jre-noble
+#FROM eclipse-temurin:8-jre-noble
+FROM eclipse-temurin:17-jre-noble
+#FROM eclipse-temurin:21-jre-noble
 
 COPY ./packages/sentinel-dashboard-1.8.8.jar /home/sentinel-dashboard.jar
 
