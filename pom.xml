@@ -53,8 +53,8 @@
 
         <!-- Build -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.source.version>1.8</java.source.version>
-        <java.target.version>1.8</java.target.version>
+        <java.source.version>17</java.source.version>
+        <java.target.version>17</java.target.version>
         <java.encoding>UTF-8</java.encoding>
         <maven.compiler.version>3.12.0</maven.compiler.version>
         <maven.surefire.version>3.2.5</maven.surefire.version>
@@ -302,7 +302,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <release>8</release>
+                    <source>17</source>
+                    <target>17</target>
+                    <release>17</release>
                 </configuration>
             </plugin>
             <plugin>
