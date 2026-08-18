@@ -286,7 +286,7 @@
                     <execution>
                         <id>default-compile</id>
                         <configuration>
-                            <release>17</release>
+                            <release>21</release>
                         </configuration>
                     </execution>
                     <execution>
