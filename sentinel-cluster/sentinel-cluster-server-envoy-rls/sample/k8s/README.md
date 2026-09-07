@@ -9,7 +9,7 @@ We could use the pre-built Docker image: `registry.cn-hangzhou.aliyuncs.com/sent
 We can also manually build the Docker image in the `sentinel-cluster-server-envoy-rls` directory:
 
 ```bash
-docker build -t "sentinel/sentinel-envoy-rls-server:latest" -f ./Dockerfile .
+docker build -t "sentinel/sentinel-envoy-rls-server:latest" -f ./my.dockerfile .
 ```
 
 ## Deploy Sentinel RLS token server

@@ -115,8 +115,8 @@ Dashboard 配置按 profile 拆分为独立文件：
 
 ### 2、Docker 部署
 
-- `Dockerfile`：基础镜像为 `eclipse-temurin:17-jre-noble`，通过 `COPY` 本地构建产物 `packages/sentinel-dashboard-1.8.8.jar` 启动
-- `Dockerfile-origin`：改造前的原始 Dockerfile 备份
+- `my.dockerfile`：基础镜像为 `eclipse-temurin:17-jre-noble`，通过 `COPY` 本地构建产物 `packages/sentinel-dashboard-1.8.8.jar` 启动
+- `origin.dockerfile`：改造前的原始 Dockerfile 备份
 - `pom.xml`：`sentinel-datasource-nacos` 依赖移除 `test` scope，作为正式依赖引入
 
 ## 五、后续待办
