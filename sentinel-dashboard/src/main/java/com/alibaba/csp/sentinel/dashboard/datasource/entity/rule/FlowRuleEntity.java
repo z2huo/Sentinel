@@ -21,6 +21,8 @@ import com.alibaba.csp.sentinel.slots.block.flow.ClusterFlowConfig;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
 
 /**
+ * <p>流控规则
+ *
  * @author leyou
  */
 public class FlowRuleEntity implements RuleEntity {

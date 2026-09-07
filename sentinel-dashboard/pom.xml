@@ -104,8 +104,19 @@
         <dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-datasource-nacos</artifactId>
-            <scope>test</scope>
         </dependency>
+
+        <!-- 显式锁定 nacos-client 2.4.2，覆盖 sentinel-datasource-nacos 传递来的 1.4.2。
+             原因：Nacos 3.2.0 起 v1/v2 HTTP 接口不再随服务端发行包发布，1.x 客户端读写全走 v1，
+             对接 Nacos 3.x 时即便挂了 legacy adapter 也只能读，发布规则会失败；
+             2.x 客户端读写走 gRPC（server-addr 端口 +1000），对 Nacos 2.x/3.x 服务端均兼容。
+             gRPC 已 shade 在 nacos-client 内部，不需要额外引入 grpc 依赖。 -->
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>2.4.2</version>
+        </dependency>
+
         <!-- for Apollo rule publisher sample -->
         <dependency>
             <groupId>com.ctrip.framework.apollo</groupId>

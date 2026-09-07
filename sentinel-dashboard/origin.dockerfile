@@ -17,4 +17,3 @@ RUN chmod -R +x /home/sentinel-dashboard.jar
 EXPOSE 8080
 
 CMD java ${JAVA_OPTS} -jar /home/sentinel-dashboard.jar
-

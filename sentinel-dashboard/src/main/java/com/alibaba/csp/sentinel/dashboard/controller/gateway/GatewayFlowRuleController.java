@@ -27,19 +27,21 @@ import com.alibaba.csp.sentinel.dashboard.domain.vo.gateway.rule.AddFlowRuleReqV
 import com.alibaba.csp.sentinel.dashboard.domain.vo.gateway.rule.GatewayParamFlowItemVo;
 import com.alibaba.csp.sentinel.dashboard.domain.vo.gateway.rule.UpdateFlowRuleReqVo;
 import com.alibaba.csp.sentinel.dashboard.repository.gateway.InMemGatewayFlowRuleStore;
+import com.alibaba.csp.sentinel.dashboard.rule.DynamicRuleProvider;
+import com.alibaba.csp.sentinel.dashboard.rule.DynamicRulePublisher;
 import com.alibaba.csp.sentinel.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-import static com.alibaba.csp.sentinel.slots.block.RuleConstant.*;
 import static com.alibaba.csp.sentinel.adapter.gateway.common.SentinelGatewayConstants.*;
 import static com.alibaba.csp.sentinel.dashboard.datasource.entity.gateway.GatewayFlowRuleEntity.*;
+import static com.alibaba.csp.sentinel.slots.block.RuleConstant.*;
 
 /**
  * Gateway flow rule Controller for manage gateway flow rules.
@@ -59,6 +61,14 @@ public class GatewayFlowRuleController {
     @Autowired
     private SentinelApiClient sentinelApiClient;
 
+    @Autowired
+    @Qualifier("gatewayFlowRuleNacosProvider")
+    private DynamicRuleProvider<List<GatewayFlowRuleEntity>> ruleProvider;
+
+    @Autowired
+    @Qualifier("gatewayFlowRuleNacosPublisher")
+    private DynamicRulePublisher<List<GatewayFlowRuleEntity>> rulePublisher;
+
     @GetMapping("/list.json")
     @AuthAction(AuthService.PrivilegeType.READ_RULE)
     public Result<List<GatewayFlowRuleEntity>> queryFlowRules(String app, String ip, Integer port) {
@@ -74,8 +84,38 @@ public class GatewayFlowRuleController {
         }
 
         try {
-            List<GatewayFlowRuleEntity> rules = sentinelApiClient.fetchGatewayFlowRules(app, ip, port).get();
-            repository.saveAll(rules);
+//            List<GatewayFlowRuleEntity> rules = sentinelApiClient.fetchGatewayFlowRules(app, ip, port).get();
+//            repository.saveAll(rules);
+
+            List<GatewayFlowRuleEntity> rules = ruleProvider.getRules(app);
+            if (!CollectionUtils.isEmpty(rules)) {
+                for (GatewayFlowRuleEntity rule : rules) {
+                    rule.setApp(app.trim());
+                    rule.setIp(ip);
+                    rule.setPort(port);
+
+                    // intervalSec：统计时间窗口，单位是秒，默认是1秒
+                    if (Objects.isNull(rule.getInterval())) {
+                        rule.setInterval(1L);
+                    }
+                    if (Objects.isNull(rule.getIntervalUnit())) {
+                        rule.setIntervalUnit(INTERVAL_UNIT_SECOND);
+                    }
+
+                    // controlBehavior：流量整型的控制效果，同限流规则的 controlBehavior 字段
+                    // 目前支持快速失败和匀速排队两种模式，默认是快速失败
+                    if (Objects.isNull(rule.getControlBehavior())) {
+                        rule.setControlBehavior(0);
+                    }
+
+                    // burst：应对突发请求时额外允许的请求数目
+                    if (Objects.isNull(rule.getBurst())) {
+                        rule.setBurst(0);
+                    }
+                }
+                repository.saveAll(rules);
+            }
+
             return Result.ofSuccess(rules);
         } catch (Throwable throwable) {
             logger.error("query gateway flow rules error:", throwable);
@@ -236,16 +276,31 @@ public class GatewayFlowRuleController {
         entity.setGmtCreate(date);
         entity.setGmtModified(date);
 
+//        try {
+//            entity = repository.save(entity);
+//        } catch (Throwable throwable) {
+//            logger.error("add gateway flow rule error:", throwable);
+//            return Result.ofThrowable(-1, throwable);
+//        }
+
+//        if (!publishRules(app, ip, port)) {
+//            logger.warn("publish gateway flow rules fail after add");
+//        }
+
         try {
+            // 设置ID
+            List<GatewayFlowRuleEntity> rules = ruleProvider.getRules(entity.getApp());
+            if (!CollectionUtils.isEmpty(rules)) {
+                Optional<GatewayFlowRuleEntity> gatewayFlowRule = rules.stream().max(Comparator.comparingLong(GatewayFlowRuleEntity::getId));
+                entity.setId(gatewayFlowRule.get().getId() + 1L);
+            }
             entity = repository.save(entity);
         } catch (Throwable throwable) {
             logger.error("add gateway flow rule error:", throwable);
             return Result.ofThrowable(-1, throwable);
         }
 
-        if (!publishRules(app, ip, port)) {
-            logger.warn("publish gateway flow rules fail after add");
-        }
+        publishRules(app);
 
         return Result.ofSuccess(entity);
     }
@@ -389,9 +444,11 @@ public class GatewayFlowRuleController {
             return Result.ofThrowable(-1, throwable);
         }
 
-        if (!publishRules(app, entity.getIp(), entity.getPort())) {
-            logger.warn("publish gateway flow rules fail after update");
-        }
+//        if (!publishRules(app, entity.getIp(), entity.getPort())) {
+//            logger.warn("publish gateway flow rules fail after update");
+//        }
+
+        publishRules(app);
 
         return Result.ofSuccess(entity);
     }
@@ -417,9 +474,11 @@ public class GatewayFlowRuleController {
             return Result.ofThrowable(-1, throwable);
         }
 
-        if (!publishRules(oldEntity.getApp(), oldEntity.getIp(), oldEntity.getPort())) {
-            logger.warn("publish gateway flow rules fail after delete");
-        }
+//        if (!publishRules(oldEntity.getApp(), oldEntity.getIp(), oldEntity.getPort())) {
+//            logger.warn("publish gateway flow rules fail after delete");
+//        }
+
+        publishRules(oldEntity.getApp());
 
         return Result.ofSuccess(id);
     }
@@ -428,4 +487,14 @@ public class GatewayFlowRuleController {
         List<GatewayFlowRuleEntity> rules = repository.findAllByMachine(MachineInfo.of(app, ip, port));
         return sentinelApiClient.modifyGatewayFlowRules(app, ip, port, rules);
     }
+
+    private void publishRules(String app) {
+        List<GatewayFlowRuleEntity> rules = repository.findAllByApp(app);
+        try {
+            rulePublisher.publish(app, rules);
+        } catch (Exception e) {
+            logger.warn("publish gateway flow rules fail, the exception is", e);;
+        }
+    }
+
 }

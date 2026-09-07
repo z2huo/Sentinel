@@ -21,6 +21,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
+ * <p>授权规则
+ *
  * @author Eric Zhao
  * @since 0.2.1
  */
